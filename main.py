@@ -9,8 +9,8 @@ def menu():
     """
     while True:
         print("                                                                                                                 ", )
-        print(colored("                                                         ¡Bienvenido al Administrador                      ", "cyan", attrs=["bold", "blink"]))
-        print(colored("                                                               de Contraseñas!                      ", "cyan", attrs=["bold", "blink"]))
+        print(colored("                                                         ¡Bienvenido al Administrador                    ", "cyan", attrs=["bold", "blink"]))
+        print(colored("                                                               de Contraseñas!                           ", "cyan", attrs=["bold", "blink"]))
         print("                                                                                                                 ", )
         print("                                                                                                                 ", )
         time.sleep(5)
