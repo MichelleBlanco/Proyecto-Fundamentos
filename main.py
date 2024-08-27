@@ -7,7 +7,7 @@ from intentargenerador import generador
 from validar_contraseña import verificarcontraseña
 
 def menu():
-    """Da la bienvenido al usuario y le brinda la opción de crear una cuenta o iniciar sesión con una existente
+    """Da la bienvenido al  y le brinda la opción de crear una cuenta o iniciar sesión con una existente
     """
     while True:
         print("                                                                                                                 ", )
