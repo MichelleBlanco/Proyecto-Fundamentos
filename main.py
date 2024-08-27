@@ -2,9 +2,10 @@ import time
 import os
 from pyfiglet import Figlet
 from termcolor import colored
-from colored import stylize, fg, attr
+from colored import attr
 from intentargenerador import generador
 from validar_contraseña import verificarcontraseña
+
 def menu():
     """Da la bienvenida al usuario y le brinda la opción de crear una cuenta o iniciar sesión con una existente
     """
@@ -14,10 +15,10 @@ def menu():
         print(colored("                                                               de Contraseñas!                           ", "cyan", attrs=["bold", "blink"]))
         print("                                                                                                                 ", )
         print("                                                                                                                 ", )
-        time.sleep(5)
+        time.sleep(3)
 
         print(colored("Menú:", "yellow", attrs=["bold", "dark"]))
-        time.sleep(2)
+        time.sleep(1)
 
         print(colored("1. Iniciar Sesión",attrs=["bold", "underline"]))
         print(colored("2. Crear Cuenta",attrs=["bold", "underline"]))
@@ -29,6 +30,7 @@ def menu():
         if opcion == "1":
             nombre_usuario = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
             contraseña = input(colored("Contraseña: ", "magenta", attrs=["bold", "dark"]))
+            #Buscar el archivo txt de un usuario
             time.sleep(2)
             os.system("cls")
 
@@ -36,34 +38,37 @@ def menu():
             #crear .txt 
             nombre_usuario = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
             #guardar nombre_usuario en el txt
-            contraseña = input(colored("Contraseña maestra: manual (1)/ generar automatico (2): ", "magenta", attrs=["bold", "dark"]))
+            contraseña = input(colored("Clave maestra: manual (1)/ generar automatico (2): ", "magenta", attrs=["bold", "dark"]))
+            time.sleep(1)
+            os.system("cls")
+
             if contraseña == "1":
-                contraseña = input(colored("Contraseña maestra: ", "magenta", attrs=["bold", "dark"]))
+                contraseña = input(colored("Clave maestra: ", "yellow", attrs=["bold", "dark"]))
                 if verificarcontraseña(contraseña) == True:
                     #guardar contraseña en el .txt
+                    #Confirmar contraseña
                     print(contraseña)
-                    print("Contraseña escrita correctamente")
-
+                    print(colored("Contraseña escrita correctamente", "green", attrs=["bold"]))
+                    time.sleep(2)
                 elif verificarcontraseña(contraseña) == False:
-                    print("Contraseña escrita incorrectamente")
+                    print(colored("Contraseña escrita incorrectamente", "red", attrs=["bold"]))
+                    time.sleep(2)
+                    os.system("cls")
+
                     while True:
-                        contraseña = input(colored("Contraseña maestra: ", "magenta", attrs=["bold", "dark"]))
+                        contraseña = input(colored("Contraseña maestra: ", "yellow", attrs=["bold", "dark"]))
                         if verificarcontraseña(contraseña) == True:
                             #guardar contraseña en el .txt
                             print(contraseña)
-                            print("Contraseña escrita correctamente")
-                            break
+                            print(colored("Contraseña escrita correctamente", "green", attrs=["bold"]))
+                            time.sleep(2)
+                            break  
 
-                    
             elif  contraseña == "2":
                 #guardar contraseña en el .txt
                 contraseña = generador()
-                print(contraseña)
-                time.sleep(2)
-
-            
-
-            time.sleep(2)
+                print(colored(f"La contraseña es: {contraseña}", "green", attrs=["bold", "dark"]))
+                time.sleep(3)
             os.system("cls")
 
         elif opcion == "3":
@@ -73,6 +78,4 @@ def menu():
             print(colored("Opción no válida.", "red", attrs=["bold"]))
             time.sleep(2)
             os.system("cls")
-
-
 menu()
