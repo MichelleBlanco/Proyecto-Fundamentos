@@ -45,7 +45,7 @@ def menu():
             os.system("cls")
 
             if contraseña == "1":
-                contraseña = input(colored("Clave maestra: ", "yellow", attrs=["bold", "dark"]))
+                contraseña = input(colored("Ingrese la clave maestra: ", "yellow", attrs=["bold", "dark"]))
                 if verificarcontraseña(contraseña) == True:
                     #guardar contraseña en el .txt
                     #Confirmar contraseña
