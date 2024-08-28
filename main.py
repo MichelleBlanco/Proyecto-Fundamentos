@@ -9,6 +9,7 @@ from validar_contraseña import verificarcontraseña
 def menu():
     """Da la bienvenida al usuario y le brinda la opción de crear una cuenta o iniciar sesión con una existente
     """
+    lista1=[]
     while True:
         print("                                                                                                                ", )
         print(colored("                                                         ¡Bienvenido al Administrador                    ", "cyan", attrs=["bold", "blink"]))
@@ -26,7 +27,6 @@ def menu():
         opcion= input(colored("Elija una opción: ", "magenta", attrs=["bold", "dark"]))
         time.sleep(1)
         os.system("cls")                        #Se encarga de limpiar la terminal después de elegir una opción
-        lista1=[]
 
         if opcion == "1":
             nombre_usuario = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
@@ -45,40 +45,32 @@ def menu():
             os.system("cls")
 
             if contraseña == "1":
-                contraseña = input(colored("Ingrese la clave maestra: ", "yellow", attrs=["bold", "dark"]))
-                if verificarcontraseña(contraseña) == True:
-                    #guardar contraseña en el .txt
-                    #Confirmar contraseña
-                    print(colored("Clave maestra escrita correctamente", "green", attrs=["bold"]))
-                    time.sleep(2)
-
-                elif verificarcontraseña(contraseña) == False:
-                    print(colored("Clave maestra escrita incorrectamente", "red", attrs=["bold"]))
-                    time.sleep(3)
-                    os.system("cls")
-
-                    while True:
-                        contraseña = input(colored("Clave maestra: ", "yellow", attrs=["bold", "dark"]))
-                        if verificarcontraseña(contraseña) == True:
+                while True:
+                    contraseña = input(colored("Clave maestra: ", "yellow", attrs=["bold", "dark"]))
+                    if verificarcontraseña(contraseña) == True:
+                        contraseña2 = input(colored("Confirme la clave maestra: ", "yellow", attrs=["bold", "dark"]))
+                        if contraseña == contraseña2:
                             #guardar contraseña en el .txt
                             print(colored("Clave maestra escrita correctamente", "green", attrs=["bold"]))
                             time.sleep(3)
-                            break  
+                            break
+                        else:
+                            print(colored("No coinciden vuelva a intentarlo", "red", attrs=["bold"]))
+                            time.sleep(2)
+                    else:
+                        print(colored("Clave maestra no válida, vuelva a intentarlo", "red", attrs=["bold"]))
+                        time.sleep(2)
+                        os.system("cls")      
 
             elif  contraseña == "2":
                 #guardar contraseña en el .txt
                 contraseña = generador()
-                print(colored(f"La clave maestra es: {contraseña}", "green", attrs=["bold", "dark"]))
+                print(colored(f"La clave maestra es: {contraseña}", "cyan", attrs=["bold", "dark"]))
                 time.sleep(3)
 
 #INGRESA LOS DATOS DE LOS USUARIOS DE LISTA2
             lista2.append(f"Clave maestra: {contraseña}")
-            print(lista2)
-            time.sleep(4)
-
-#INGRESA LA LISTA2 EN LA LISTA1
-            lista1.append(lista2)
-            os.system("cls")
+            time.sleep(3)
 
         elif opcion == "3":
             exit()
@@ -87,4 +79,11 @@ def menu():
             print(colored("Opción no válida.", "red", attrs=["bold"]))
             time.sleep(2)
             os.system("cls")
+
+#INGRESA LA LISTA2 EN LA LISTA1
+        lista1.append(lista2)
+        print(lista1)
+        time.sleep(3)
+        os.system("cls")
+
 menu()
