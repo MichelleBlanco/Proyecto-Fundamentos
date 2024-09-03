@@ -6,9 +6,13 @@ from colored import attr
 from intentargenerador import generador
 from validar_contraseña import verificarcontraseña
 
+
+
 def menu():
     """Da la bienvenida al usuario y le brinda la opción de crear una cuenta o iniciar sesión con una existente
     """
+    nombre_archivo = "usuarios.txt"
+    
     lista1=[]
     while True:
         print("                                                                                                                ", )
@@ -46,6 +50,15 @@ def menu():
 
             if contraseña == "1":
                 while True:
+
+                    #DAR A CONOCER A LOS USUARIOS LOS PARÁMETROS QUE SE DEBEN DE CUMPLIR PARA CREAR LA CONTRASEÑA CORRECTAMENTE
+                    print("                                                                        ")
+                    print(colored("La clave maestra debe contener:", "magenta", attrs=["bold", "dark"]))
+                    print(colored("* Como mínimo 8 y como máximo 12 caracteres.", "green", attrs=["bold", "dark"]))
+                    print(colored("* Al menos una letra mayúscula y una minúscula.", "green", attrs=["bold", "dark"]))
+                    print(colored("* Al menos un número y alguno de los siguientes símbolos: #,$,@", "green", attrs=["bold", "dark"]))
+                    print("                                                                        ")
+                    
                     contraseña = input(colored("Clave maestra: ", "yellow", attrs=["bold", "dark"]))
                     if verificarcontraseña(contraseña) == True:
                         contraseña2 = input(colored("Confirme la clave maestra: ", "yellow", attrs=["bold", "dark"]))
@@ -57,6 +70,7 @@ def menu():
                         else:
                             print(colored("No coinciden vuelva a intentarlo", "red", attrs=["bold"]))
                             time.sleep(2)
+                            os.system("cls")
                     else:
                         print(colored("Clave maestra no válida, vuelva a intentarlo", "red", attrs=["bold"]))
                         time.sleep(2)
@@ -68,8 +82,16 @@ def menu():
                 print(colored(f"La clave maestra es: {contraseña}", "cyan", attrs=["bold", "dark"]))
                 time.sleep(3)
 
-#INGRESA LOS DATOS DE LOS USUARIOS DE LISTA2
+#INGRESA LOS DATOS DE LOS USUARIOS EN LISTA2
             lista2.append(f"Clave maestra: {contraseña}")
+            with open (nombre_usuario, "x") as archivo:  #Da error si el archivo ya existe, pero hasta después de poner la contraseña. 
+                for elemento in lista1:
+                    if elemento == nombre_usuario:
+                        print ("El usuario ya existe")
+                        time.sleep(2)
+                    else:
+                        archivo.write(str(elemento)+"\n")
+            print(lista2)
             time.sleep(3)
 
         elif opcion == "3":
@@ -83,6 +105,9 @@ def menu():
 #INGRESA LA LISTA2 EN LA LISTA1
         lista1.append(lista2)
         print(lista1)
+        with open (nombre_archivo, "a") as archivo:
+            for elemento in lista1:
+                archivo.write(str(elemento)+"\n")
         time.sleep(3)
         os.system("cls")
 
