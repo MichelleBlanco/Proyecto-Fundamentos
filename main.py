@@ -5,13 +5,17 @@ from termcolor import colored
 from colored import attr
 from intentargenerador import generador
 from validar_contraseña import verificarcontraseña
+import ast
 
 def menu():
     """Da la bienvenida al usuario y le brinda la opción de crear una cuenta o iniciar sesión con una existente
     """
     nombre_archivo = "usuarios.txt"
-    lista1 = []
+    
     while True:
+        ListaUsuariosTotal = []
+        Datos = []
+    
         print("                                                                                                                ", )
         print(colored("                                                         ¡Bienvenido al Administrador                    ", "cyan", attrs=["bold", "blink"]))
         print(colored("                                                               de Contraseñas!                           ", "cyan", attrs=["bold", "blink"]))
@@ -30,26 +34,44 @@ def menu():
         os.system("cls")  # Limpia la terminal después de elegir una opción
 
         if opcion == "1":
-            nombre_usuario = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
-            contraseña = input(colored("Clave maestra: ", "magenta", attrs=["bold", "dark"]))
-            # Buscar el archivo txt de un usuario
-            time.sleep(3)
-            os.system("cls")
+            while True:
+                with open(nombre_archivo, "r") as archivo:
+                        for linea in archivo:
+                            # Convertir la línea en una lista usando ast.literal_eval
+                            ListaUsuariosTotal = ast.literal_eval(linea.strip())
+                nombre = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
+                contra = input(colored("Clave maestra: ", "yellow", attrs=["bold", "dark"]))
+                usuario_encontrado = False
 
+                # Recorre la lista de usuarios para comparar nombre y contraseña
+                for usuario in ListaUsuariosTotal:
+                    if nombre == usuario[0]:
+                        usuario_encontrado = True
+                        if contra == usuario[1]:
+                            print("Iniciaste sesión")
+                            False
+                        else:
+                            print("El usuario o la contraseña está incorrecta")                          
+                # Si no se encontró el usuario
+                if not usuario_encontrado:
+                    print("Ese usuario no existe")
+                                
+                
         elif opcion == "2":
-            lista2 = []
+            
             nombre_usuario = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
 
-            if nombre_usuario in lista1:
+            if nombre_usuario in ListaUsuariosTotal:
                 print("El usuario ya existe")
                 time.sleep(2)
             else:
-                lista2.append(f"Nombre de usuario: {nombre_usuario}")
-                contraseña = input(colored("Clave maestra: manual (1)/ generar automático (2): ", "magenta", attrs=["bold", "dark"]))
+                Datos.append(nombre_usuario)
+                OpcionContraseña= input(colored("Clave maestra: manual (1)/ generar automático (2): ", "magenta", attrs=["bold", "dark"]))
+                
                 time.sleep(2)
                 os.system("cls")
 
-                if contraseña == "1":
+                if OpcionContraseña == "1":
                     while True:
                         print("                                                                        ")
                         print(colored("La clave maestra debe contener:", "magenta", attrs=["bold", "dark"]))
@@ -59,9 +81,11 @@ def menu():
                         print("                                                                        ")
                         
                         contraseña = input(colored("Clave maestra: ", "yellow", attrs=["bold", "dark"]))
+                        Datos.append(contraseña)
+                        
                         if verificarcontraseña(contraseña):
-                            contraseña2 = input(colored("Confirme la clave maestra: ", "yellow", attrs=["bold", "dark"]))
-                            if contraseña == contraseña2:
+                            contraseñaverificar = input(colored("Confirme la clave maestra: ", "yellow", attrs=["bold", "dark"]))
+                            if contraseña == contraseñaverificar:
                                 print(colored("Clave maestra escrita correctamente", "green", attrs=["bold"]))
                                 time.sleep(3)
                                 break
@@ -74,32 +98,32 @@ def menu():
                             time.sleep(2)
                             os.system("cls")      
 
-                elif contraseña == "2":
+                elif OpcionContraseña == "2":
                     contraseña = generador()
+                    Datos.append(contraseña)
                     print(colored(f"La clave maestra es: {contraseña}", "cyan", attrs=["bold", "dark"]))
                     time.sleep(3)
-                
-                
-                lista1.append(nombre_usuario)
-                with open(nombre_archivo, "w") as archivo:
-                    for usuario in lista1:
-                        archivo.write(f"Nombre de usuario: {usuario}\n")
-                        print(lista2)
-                        time.sleep(3)
-                        os.system("cls")
-
-                lista2.append(f"Clave maestra: {contraseña}")
                 with open(nombre_usuario, "x") as archivo:
-                    for elemento in lista2:
+                    for elemento in Datos:
                         archivo.write(str(elemento) + "\n")
-                
-                # Añadir usuario a la lista1 y guardar en archivo principal
-                with open(nombre_archivo, "w") as archivo:
-                    lista1.append(lista2)
-                    archivo.write(f"{lista1}\n")
-                print(lista2)
-                time.sleep(3)
-                os.system("cls")
+
+            ListaUsuariosTotal.append(Datos)        
+            if os.path.exists(nombre_archivo):
+                with open(nombre_archivo, "r") as archivo:
+                    for linea in archivo:
+                        # Convertir la línea en una lista usando ast.literal_eval
+                        ListaUsuariosTotal = ast.literal_eval(linea.strip())
+
+                    ListaUsuariosTotal.append(Datos)
+                    with open(nombre_archivo, "w") as archivo:
+                        archivo.write(str(ListaUsuariosTotal))
+
+            else:
+                with open(nombre_archivo, "x") as archivo:
+                    ListaUsuariosTotal = str(ListaUsuariosTotal)
+                    print(ListaUsuariosTotal)
+                    archivo.write(str(ListaUsuariosTotal))
+             
 
         elif opcion == "3":
             exit()
@@ -110,4 +134,3 @@ def menu():
             os.system("cls")
 
 menu()
-
