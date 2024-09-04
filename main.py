@@ -34,7 +34,9 @@ def menu():
         os.system("cls")  # Limpia la terminal después de elegir una opción
 
         if opcion == "1":
-            while True:
+            Iniciarsecion = True
+            Usuario_iniciado = " "
+            while Iniciarsecion:
                 with open(nombre_archivo, "r") as archivo:
                         for linea in archivo:
                             # Convertir la línea en una lista usando ast.literal_eval
@@ -49,14 +51,41 @@ def menu():
                         usuario_encontrado = True
                         if contra == usuario[1]:
                             print("Iniciaste sesión")
-                            False
+                            Usuario_iniciado = usuario[0]
+                            Iniciarsecion = False
+                            time.sleep(1)
+                            os.system("cls")    
                         else:
-                            print("El usuario o la contraseña está incorrecta")                          
+                            print("El usuario o la contraseña está incorrecta")
+                            time.sleep(1)
+                            os.system("cls")                           
                 # Si no se encontró el usuario
                 if not usuario_encontrado:
                     print("Ese usuario no existe")
-                                
-                
+                    time.sleep(2)
+                    os.system("cls") 
+            while True:
+                print(colored(f"Usuario: {Usuario_iniciado}", "yellow", attrs=["bold", "dark"]))
+                time.sleep(1)
+                print(colored("1. Agregar contraseña",attrs=["bold", "underline"]))
+                print(colored("2. Buscar: (1)Nombre de usuario/(2)URL ",attrs=["bold", "underline"]))
+                print(colored("3. Cerrar sesión",attrs=["bold", "underline"]))
+                opcion= input(colored("Elija una opción: ", "magenta", attrs=["bold", "dark"]))
+                time.sleep(1)
+                os.system("cls")    
+                if opcion == "1":
+                    usuarioaplicacion = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
+                    clave = input(colored("Clave maestra: ", "magenta", attrs=["bold", "dark"]))
+                    direccionurl = input(colored("URL: ", "magenta", attrs=["bold", "dark"]))
+                    descripción = input(colored("Descripción (opcional): ", "magenta", attrs=["bold", "dark"]))
+                    fechacreacion = input(colored("Fecha de creación (opcional): ", "magenta", attrs=["bold", "dark"]))
+                    time.sleep(1)
+                    os.system("cls") 
+                elif opcion == "2":
+                    pass
+                elif opcion == "3":
+                    menu()
+
         elif opcion == "2":
             
             nombre_usuario = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
@@ -134,3 +163,4 @@ def menu():
             os.system("cls")
 
 menu()
+
