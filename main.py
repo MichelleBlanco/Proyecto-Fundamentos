@@ -34,9 +34,9 @@ def menu():
         os.system("cls")  # Limpia la terminal después de elegir una opción
 
         if opcion == "1":
-            Iniciarsecion = True
+            Iniciarsesion = True
             Usuario_iniciado = " "
-            while Iniciarsecion:
+            while Iniciarsesion:
                 with open(nombre_archivo, "r") as archivo:
                         for linea in archivo:
                             # Convertir la línea en una lista usando ast.literal_eval
@@ -52,7 +52,7 @@ def menu():
                         if contra == usuario[1]:
                             print("Iniciaste sesión")
                             Usuario_iniciado = usuario[0]
-                            Iniciarsecion = False
+                            Iniciarsesion = False
                             time.sleep(1)
                             os.system("cls")    
                         else:
