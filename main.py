@@ -38,7 +38,7 @@ def menu():
         print(colored("                                                               de Contraseñas!                           ", "cyan", attrs=["bold", "blink"]))
         print("                                                                                                                 ", )
         print("                                                                                                                 ", )
-        time.sleep(3)
+
 
         print(colored("Menú:", "yellow", attrs=["bold", "dark"]))
         time.sleep(1)
@@ -76,40 +76,96 @@ def menu():
                         time.sleep(1)
                         os.system("cls")    
                         if opcion_usuario == "1":
-                            usuarioaplicacion = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
-                            if usuarioaplicacion=="":
-                                print("Debe escribir un nombre de usuario")
-                            else:  
-                                clave = input(colored("Clave maestra: ", "magenta", attrs=["bold", "dark"]))
-                                if clave=="":
-                                    print("Debe escribir una clave")        
-                                else: 
-                                    direccionurl = input(colored("URL: ", "magenta", attrs=["bold", "dark"]))
-                                    if direccionurl=="":
-                                        print("Debe escribir un URL")
-                                    else:
-                                        descripcion = input(colored("Descripción (opcional): ", "magenta", attrs=["bold", "dark"]))
-                                        fechacreacion = input(colored("Fecha de creación (opcional): ", "magenta", attrs=["bold", "dark"]))
+                                usuarioaplicacion = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
+                                if usuarioaplicacion=="":
+                                    print("Debe escribir un nombre de usuario")
+                                elif usuarioaplicacion != "":
+                                    clave = input(colored("Clave maestra: manual (1)/ generar automatico (2): ", "magenta", attrs=["bold", "dark"]))
+                                    if clave=="":
+                                        print("Debe escribir una clave")  
 
-                                        # Encriptar la clave antes de guardarla
-                                        clave_encriptada = encriptar(clave)
-                                        nuevosdatos = [usuarioaplicacion, clave_encriptada, direccionurl, descripcion, fechacreacion]
+                                    elif clave == "1":
+                                        datos.append(usuarioaplicacion)
+                                            #DAR A CONOCER A LOS USUARIOS LOS PARÁMETROS QUE SE DEBEN DE CUMPLIR PARA CREAR LA CONTRASEÑA CORRECTAMENTE
+                                        print("                                                                        ")
+                                        print(colored("La clave maestra debe contener:", "magenta", attrs=["bold", "dark"]))
+                                        print(colored("* Como mínimo 8 y como máximo 12 caracteres.", "green", attrs=["bold", "dark"]))
+                                        print(colored("* Al menos una letra mayúscula y una minúscula.", "green", attrs=["bold", "dark"]))
+                                        print(colored("* Al menos un número y alguno de los siguientes símbolos: #,$,@", "green", attrs=["bold", "dark"]))
+                                        print("                                                                        ")
+                                        clave = input(colored("Clave maestra: ", "yellow", attrs=["bold", "dark"]))
+                                        if verificarcontraseña(clave) == True:
+                                            clave2 = input(colored("Confirme la clave maestra: ", "yellow", attrs=["bold", "dark"]))
+                                            if clave == clave2:
+                                                clave = False 
+                                                datos = str(datos)
+                                                clave = True
+                                                #guardar contraseña en el .txt
+                                                print(colored("Clave maestra escrita correctamente", "green", attrs=["bold"]))
+                                                if clave == True:
+                                                    direccionurl = input(colored("URL: ", "magenta", attrs=["bold", "dark"]))
+                                                    if direccionurl=="":
+                                                        print("Debe escribir un URL")
+                                                    else:
+                                                        descripcion = input(colored("Descripción (opcional): ", "magenta", attrs=["bold", "dark"]))
+                                                        fechacreacion = input(colored("Fecha de creación (opcional): ", "magenta", attrs=["bold", "dark"]))
+                                                        # Encriptar la clave antes de guardarla
+                                                        clave_encriptada = encriptar(clave2)
+                                                        nuevosdatos = [usuarioaplicacion, clave_encriptada, direccionurl, descripcion, fechacreacion]
+                                                        # Abrir el archivo en modo lectura primero para obtener su contenido
+                                                        with open(nombre, "r") as archivo:
+                                                            lineas = archivo.readlines()  # Leer todas las líneas
+                                                        # Abrir el archivo en modo escritura para modificarlo
+                                                        with open(nombre, "w") as archivo:
+                                                            for linea in lineas:
+                                                                # Convertir la línea en una lista usando ast.literal_eval
+                                                                lista_existente = ast.literal_eval(linea.strip())
+                                                                lista_existente.append(nuevosdatos)  # Agregar los nuevos datos a la lista existente
+                                                                archivo.write(str(lista_existente) + "\n")  # Escribir la lista actualizada de vuelta al archivo
+                                                    time.sleep(3)
+                                                    os.system("cls")
+                                                
+                                            else:
+                                                print(colored("No coinciden vuelva a intentarlo", "red", attrs=["bold"]))
+                                                time.sleep(2)
+                                                os.system("cls")
+                                        else:
+                                            print(colored("Clave maestra no válida, vuelva a intentarlo", "red", attrs=["bold"]))
+                                            time.sleep(2)
+                                            os.system("cls")   
 
+                                    elif  clave == "2":
+                                            datos = []
+                                            datos.append(usuarioaplicacion)
+                                            clave = generador()
+                                            datos = str(datos)
+                                            print(colored(f"La clave maestra es: {clave}", "cyan", attrs=["bold", "dark"]))
+                                            if clave != "":
+                                                direccionurl = input(colored("URL: ", "magenta", attrs=["bold", "dark"]))
+                                                if direccionurl=="":
+                                                    print("Debe escribir un URL")
+                                                else:
+                                                    descripcion = input(colored("Descripción (opcional): ", "magenta", attrs=["bold", "dark"]))
+                                                    fechacreacion = input(colored("Fecha de creación (opcional): ", "magenta", attrs=["bold", "dark"]))
 
-                                        # Abrir el archivo en modo lectura primero para obtener su contenido
-                                        with open(nombre, "r") as archivo:
-                                            lineas = archivo.readlines()  # Leer todas las líneas
+                                                    # Encriptar la clave antes de guardarla
+                                                    clave_encriptar = encriptar(clave)
+                                                    nuevosdatos = [usuarioaplicacion, clave_encriptar, direccionurl, descripcion, fechacreacion]
 
-                                        # Abrir el archivo en modo escritura para modificarlo
-                                        with open(nombre, "w") as archivo:
-                                            for linea in lineas:
-                                                # Convertir la línea en una lista usando ast.literal_eval
-                                                lista_existente = ast.literal_eval(linea.strip())
-                                                lista_existente.append(nuevosdatos)  # Agregar los nuevos datos a la lista existente
-                                                archivo.write(str(lista_existente) + "\n")  # Escribir la lista actualizada de vuelta al archivo
+                                                    # Abrir el archivo en modo lectura primero para obtener su contenido
+                                                    with open(nombre, "r") as archivo:
+                                                        lineas = archivo.readlines()  # Leer todas las líneas
 
-                                        time.sleep(1)
-                                        os.system("cls")
+                                                    # Abrir el archivo en modo escritura para modificarlo
+                                                    with open(nombre, "w") as archivo:
+                                                        for linea in lineas:
+                                                            # Convertir la línea en una lista usando ast.literal_eval
+                                                            lista_existente = ast.literal_eval(linea.strip())
+                                                            lista_existente.append(nuevosdatos)  # Agregar los nuevos datos a la lista existente
+                                                            archivo.write(str(lista_existente) + "\n")  # Escribir la lista actualizada de vuelta al archivo
+
+                                            time.sleep(3)
+                                            os.system("cls")
 
                         elif opcion_usuario == "2":
                             if opcion_usuario == "2":
@@ -164,7 +220,6 @@ def menu():
                                                      if isinstance(sublista, list) and sublista[0] == n:  # Comparar el nombre de usuario
                                                          # Cambiar la contraseña en la sublista
                                                         sublista[1] = encriptar(nueva_contra)  # Actualizar contraseña
-                                                        print(f"Contraseña actualizada para el usuario: {n}")
                                         
                                                  # Agregar la lista modificada a nuevas_lineas
                                                 nuevas_lineas.append(str(lista_usuarios) + "\n")
@@ -173,10 +228,9 @@ def menu():
                                             with open(nombre, "w") as archivo:
                                                 archivo.writelines(nuevas_lineas)
 
-        
-
                                             print("Contraseña actualizada correctamente.")
-
+                                            time.sleep(2)
+                                            os.system("cls")
 
                             else:
                                 print("El usuario no existe")
@@ -217,7 +271,6 @@ def menu():
                                     time.sleep(3)
                                     os.system("cls")
                             
-
                         elif opcion_usuario == "4":
                             menu()  
                 else:
@@ -298,5 +351,3 @@ def menu():
 
 
 menu()
-
-
