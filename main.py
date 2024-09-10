@@ -74,8 +74,7 @@ def menu():
                         print(colored("4. Cerrar sesión",attrs=["bold", "underline"]))
                         opcion_usuario= input(colored("Elija una opción: ", "magenta", attrs=["bold", "dark"]))
                         time.sleep(1)
-                        os.system("cls") 
-
+                        os.system("cls")    
                         if opcion_usuario == "1":
                             usuarioaplicacion = input(colored("Nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
                             if usuarioaplicacion=="":
@@ -129,6 +128,7 @@ def menu():
                                             print("•"+sublista[0])  # Imprimir el primer elemento de cada sublista (nombre de usuario)
                                     # Solicitar input para el usuario
                                 n = input(colored("Ingrese el nombre de usuario: ", "magenta", attrs=["bold", "dark"]))
+                                os.system("cls")
                                 palabrasinfo= ["Contraseña cuenta: ","URL: ","Descripcion: ", "Fecha de creacion: "]
                                 i = 0
                                     # Buscar e imprimir los datos correspondientes al usuario ingresado
@@ -140,22 +140,43 @@ def menu():
                                             # Imprimir el resto de la sublista excluyendo el nombre de usuario
                                             for x in sublista[1:]:
                                                 if i == 0:
-                                                    if input(colored("¿Desea desencriptar la contraseña? (S/N): ","cyan", attrs=["bold"])).lower() == "s":
+                                                    if input("¿Desea desencriptar la contraseña? (S/N): ").lower() == "s":
                                                         x = desencriptar(x)
                                                 print(palabrasinfo[i] + x)
                                                 i+=1 # Esto imprimirá desde el segundo elemento en adelante (contraseña, x, x, x)
                                                 time.sleep(2)
-
                                     if input(colored("¿Desea cambiar la contraseña? (S/N): ","cyan", attrs=["bold"])).lower() == "s":
-                                        clave = desencriptar(nuevosdatos[clave])
-                                        nueva_contra= input(colored("Escriba una nueva contraseña: ","cyan", attrs=["bold"]))
-                                        if nueva_contra=="":
-                                            print("No escribió ninguna contraseña") 
+                                        nueva_contra = input(colored("Escriba una nueva contraseña: ","cyan", attrs=["bold"]))
+                                        if nueva_contra == "":
+                                            print("No escribió ninguna contraseña")
                                         else:
-                                            with open(nombre,"w") as archivo:
-                                                nuevosdatos[clave_encriptada] = nuevosdatos[nueva_contra]
-                                                archivo.write(nueva_contra)
-                                                contraseña_encriptada=encriptar(nuevosdatos[nueva_contra])
+                                            # Leer todas las líneas del archivo
+                                            with open(nombre, "r") as archivo:
+                                                lineas = archivo.readlines()
+
+                                            # Vamos a modificar la línea específica que contiene la información del usuario
+                                            nuevas_lineas = []  # Nueva lista para almacenar líneas modificadas
+
+                                            for linea in lineas:
+                                                lista_usuarios = ast.literal_eval(linea.strip())  # Convertir a lista
+
+                                                for sublista in lista_usuarios:
+                                                     if isinstance(sublista, list) and sublista[0] == n:  # Comparar el nombre de usuario
+                                                         # Cambiar la contraseña en la sublista
+                                                        sublista[1] = encriptar(nueva_contra)  # Actualizar contraseña
+                                                        print(f"Contraseña actualizada para el usuario: {n}")
+                                        
+                                                 # Agregar la lista modificada a nuevas_lineas
+                                                nuevas_lineas.append(str(lista_usuarios) + "\n")
+                                        
+                                             # Escribir las líneas modificadas de nuevo en el archivo
+                                            with open(nombre, "w") as archivo:
+                                                archivo.writelines(nuevas_lineas)
+
+        
+
+                                            print("Contraseña actualizada correctamente.")
+
 
                             else:
                                 print("El usuario no existe")
@@ -172,7 +193,8 @@ def menu():
                             n = input(colored("Ingrese la URL: ", "magenta", attrs=["bold", "dark"]))
                             if n == "":
                                 print("No agregaste un URL")
-                                
+                               
+                            
                             elif len(n)>2:
                                 # Procesar cada línea
                                 for linea in lineas:
@@ -184,7 +206,7 @@ def menu():
                                         if isinstance(sublista, list) and len(sublista) >= 3:
                                             # Verificar si la URL en la tercera posición coincide con n
                                             if sublista[2] == n:
-                                                print(colored("Datos de la sublista (excluyendo la URL):", "green", attrs=["bold"]))
+                                                print(colored("Datos de la sublista: ", "green", attrs=["bold"]))
                                                 # Imprimir el resto de la sublista, excluyendo la URL
                                                 for x in sublista[0:2] + sublista[3:]:
                                                     if i == 1:  # Preguntar si se desea desencriptar la contraseña
@@ -192,7 +214,7 @@ def menu():
                                                             x = desencriptar(x)
                                                     print(palabrasinfo[i] + x)
                                                     i += 1
-                                    time.sleep(2)
+                                    time.sleep(3)
                                     os.system("cls")
                             
 
