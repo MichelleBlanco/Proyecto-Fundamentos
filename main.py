@@ -200,38 +200,84 @@ def menu():
                                                         x = desencriptar(x)
                                                 print(palabrasinfo[i] + x)
                                                 i+=1 # Esto imprimirá desde el segundo elemento en adelante (contraseña, x, x, x)
-                                                time.sleep(2)
-                                    if input(colored("¿Desea cambiar la contraseña? (S/N): ","cyan", attrs=["bold"])).lower() == "s":
-                                        nueva_contra = input(colored("Escriba una nueva contraseña: ","cyan", attrs=["bold"]))
-                                        if nueva_contra == "":
-                                            print("No escribió ninguna contraseña")
-                                        else:
-                                            # Leer todas las líneas del archivo
-                                            with open(nombre, "r") as archivo:
-                                                lineas = archivo.readlines()
-
-                                            # Vamos a modificar la línea específica que contiene la información del usuario
-                                            nuevas_lineas = []  # Nueva lista para almacenar líneas modificadas
-
-                                            for linea in lineas:
-                                                lista_usuarios = ast.literal_eval(linea.strip())  # Convertir a lista
-
-                                                for sublista in lista_usuarios:
-                                                     if isinstance(sublista, list) and sublista[0] == n:  # Comparar el nombre de usuario
-                                                         # Cambiar la contraseña en la sublista
-                                                        sublista[1] = encriptar(nueva_contra)  # Actualizar contraseña
-                                        
-                                                 # Agregar la lista modificada a nuevas_lineas
-                                                nuevas_lineas.append(str(lista_usuarios) + "\n")
-                                        
-                                             # Escribir las líneas modificadas de nuevo en el archivo
-                                            with open(nombre, "w") as archivo:
-                                                archivo.writelines(nuevas_lineas)
-
-                                            print("Contraseña actualizada correctamente.")
                                             time.sleep(2)
                                             os.system("cls")
+                                    if input(colored("¿Desea cambiar la contraseña? (S/N): ","cyan", attrs=["bold"])).lower() == "s":
+                                        opcion_cambiar=input(colored("(1) Forma manual/ (2) Forma automática: ","cyan", attrs=["bold"]))
+                                        if opcion_cambiar=="1":
+                                            print("                                                                        ")
+                                            print(colored("La clave maestra debe contener:", "magenta", attrs=["bold", "dark"]))
+                                            print(colored("* Como mínimo 8 y como máximo 12 caracteres.", "green", attrs=["bold", "dark"]))
+                                            print(colored("* Al menos una letra mayúscula y una minúscula.", "green", attrs=["bold", "dark"]))
+                                            print(colored("* Al menos un número y alguno de los siguientes símbolos: #,$,@", "green", attrs=["bold", "dark"]))
+                                            print("                                                                        ")
+                                            nueva_contra = input(colored("Escriba una nueva contraseña: ","cyan", attrs=["bold"]))
+                                            if verificarcontraseña(nueva_contra) == True:
+                                                nueva_contra2= input(colored("Confirme la clave maestra: ", "yellow", attrs=["bold", "dark"]))
+                                                if nueva_contra == nueva_contra2:
+                                                    datos = str(datos)
+                                                       # Leer todas las líneas del archivo
+                                                    with open(nombre, "r") as archivo:
+                                                        lineas = archivo.readlines()
 
+                                                    # Vamos a modificar la línea específica que contiene la información del usuario
+                                                    nuevas_lineas = []  # Nueva lista para almacenar líneas modificadas
+
+                                                    for linea in lineas:
+                                                        lista_usuarios = ast.literal_eval(linea.strip())  # Convertir a lista
+
+                                                        for sublista in lista_usuarios:
+                                                             if isinstance(sublista, list) and sublista[0] == n:  # Comparar el nombre de usuario
+                                                                 # Cambiar la contraseña en la sublista
+                                                                sublista[1] = encriptar(nueva_contra)  # Actualizar contraseña
+
+                                                         # Agregar la lista modificada a nuevas_lineas
+                                                        nuevas_lineas.append(str(lista_usuarios) + "\n")
+
+                                                     # Escribir las líneas modificadas de nuevo en el archivo
+                                                    with open(nombre, "w") as archivo:
+                                                        archivo.writelines(nuevas_lineas)
+                                                        #guardar contraseña en el .txt
+                                                        print(colored("Contraseña actualizada correctamente.", "green", attrs=["bold"]))
+                                                        time.sleep(2)
+                                                        os.system("cls")
+                                                else:
+                                                    print(colored("No coinciden vuelva a intentarlo", "red", attrs=["bold"]))
+                                                    time.sleep(2)
+                                                    os.system("cls")
+                                            else:
+                                                print(colored("Clave maestra no válida, vuelva a intentarlo", "red", attrs=["bold"]))
+                                                time.sleep(2)
+                                                os.system("cls")
+                                        elif opcion_cambiar=="2":
+                                            opcion_cambiar = generador()
+                                            datos = str(datos)
+                                            print(colored(f"La clave maestra es: {opcion_cambiar}", "cyan", attrs=["bold", "dark"]))
+                                            if opcion_cambiar != "":
+                                                    with open(nombre, "r") as archivo:
+                                                        lineas = archivo.readlines()
+
+                                                    # Vamos a modificar la línea específica que contiene la información del usuario
+                                                    nuevas_lineas = []  # Nueva lista para almacenar líneas modificadas
+
+                                                    for linea in lineas:
+                                                        lista_usuarios = ast.literal_eval(linea.strip())  # Convertir a lista
+
+                                                        for sublista in lista_usuarios:
+                                                             if isinstance(sublista, list) and sublista[0] == n:  # Comparar el nombre de usuario
+                                                                 # Cambiar la contraseña en la sublista
+                                                                sublista[1] = encriptar(opcion_cambiar)  # Actualizar contraseña
+
+                                                         # Agregar la lista modificada a nuevas_lineas
+                                                        nuevas_lineas.append(str(lista_usuarios) + "\n")
+
+                                                     # Escribir las líneas modificadas de nuevo en el archivo
+                                                    with open(nombre, "w") as archivo:
+                                                        archivo.writelines(nuevas_lineas)
+                                                        #guardar contraseña en el .txt
+                                                        print(colored("Contraseña actualizada correctamente.", "green", attrs=["bold"]))
+                                                        time.sleep(2)
+                                                        os.system("cls")
                             else:
                                 print("El usuario no existe")
                                 time.sleep(2)
